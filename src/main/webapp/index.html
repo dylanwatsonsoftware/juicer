@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>juicer - a meta data extraction API</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-scrollspy.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Topbar
+    ================================================== -->
+    <div class="topbar" data-scrollspy="scrollspy" >
+      <div class="topbar-inner">
+        <div class="container">
+          <a class="brand" href="#">juicer</a>
+          <ul class="nav">
+            <li class="active"><a href="#overview">Overview</a></li>
+            <li><a href="#articles">Article Metadata</a></li>
+            <li><a href="#entities">Named Entities</a></li>
+            <li><a href="#entityInfo">Entity Information</a></li>
+            <li><a href="#hackers">Hackers</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Masthead (blueprinty thing)
+    ================================================== -->
+
+    <header class="jumbotron masthead" id="overview">
+      <div class="inner">
+        <div class="container">
+          <h1>juicer</h1>
+          <p class="lead">
+            juicer is a small API for extracting text data from web pages, you provide a URL, <br />
+            and juicer squeezes out the page meta data, body text and named entities
+          </p>
+        </div>
+      </div>
+    </header>
+
+
+    <div class="container">
+
+      <section id="overview">
+        <div class="page-header">
+          <h1>About juicer <small>an API for web page meta data extraction</small></h1>
+        </div>
+
+        <p>juicer is a simple API for extracting meta data from the text in web pages. It works best on on "article" type pages such as those you find on blogs and news websites. It may not work at all on some types of page.</p>
+
+        <p>Two end points are provided <code><a href="#articles">/api/article</a></code> and <code><a href="#entities">/api/entities</a></code>, these can be use to extract meta data from a URL or by uploading a blob of text respectively.</p>
+
+        <p>juicer is a toy project, hacked together over the holidays. Please use and abuse it but with no guarantees!</p>
+
+        <h3>Props</h3>
+
+        <p>juicer is other people's excellent work glued together in a web API, it's built with &hellip;</p>
+
+        <ul>
+          <li><a href="https://github.com/jiminoc/goose">Goose</a></li>
+          <li><a href="http://nlp.stanford.edu/software/CRF-NER.shtml">Stanford NER</a></li>
+          <li><a href="http://twitter.github.com/bootstrap/#tables">Bootstrap (for this snazzy layout)</a></li>
+        </ul>
+
+      </section>
+
+      <section id="articles">
+
+        <div class="page-header">
+          <h1>Article meta data extraction</h1>
+        </div>
+
+        <h3>URL</h3>
+        <p><code>GET /api/article</code></p>
+
+        <h3>Parameters</h3>
+
+        <p><code>url</code> - A URL to the article page you want meta data for</p>
+
+        <h3>Response</h3>
+
+        <p>A JSON response, showing article meta data, body text and named entity text, frequency and type (one of Location, Person, Organization)</p>
+
+        <pre>
+{
+  "article" : {
+    "url"          : http://www.bbc.co.uk/news/world-africa-16377824,
+    "domain"       : "www.bbc.co.uk",
+    "hash"         : "ac2f2e739421184f01c942b057f8449d",
+    "title"        : "South Sudan 'sends more troops' to strife-torn town Pibor",
+    "description"  : "Article meta description ...",
+    "body"         : "Article body text ... ",
+    "image"        : {
+      "src"    : "http://news.bbcimg.co.uk/media/images/57644000/jpg/_57644369_armed-lou-nuer-youth-in-lik.jpg",
+      "width"  : 304,
+      "height" : 171
+    },
+    "entities"     : [
+      {
+        "text"      : "South Sudan",
+        "type"      : "Location",
+        "frequency" : 1
+      },
+      ...
+    ]
+  }
+}
+        </pre>
+
+        <h3>Example</h3>
+
+        <p>Here's an example API call <a href="/api/article?url=http://www.bbc.co.uk/news/world-africa-16377824">/api/article?url=http://www.bbc.co.uk/news/world-africa-16377824</a></p>
+
+      </section>
+
+      <section id="entities">
+
+        <div class="page-header">
+          <h1>Named entity extraction</h1>
+        </div>
+
+        <h3>URL</h3>
+        <p><code>POST /api/entities</code></p>
+
+        <h3>Parameters</h3>
+
+        <p><code>text</code> - A string of text you want to analyse</p>
+
+        <h3>Response</h3>
+
+        <p>A JSON response, showing entity text, frequency and type (one of Location, Person, Organization)</p>
+
+        <pre>
+{
+  "entities" : [
+    {
+      "text"      : "Met Office",
+      "type"      : "Organization",
+      "frequency" : 2
+    },
+    {
+      "text"      : "John Prior",
+      "type"      : "Person",
+      "frequency" : 1
+    },
+    {
+      "text"      : "UK",
+      "type"      : "Location",
+      "frequency" : 2
+    }
+  ]
+}
+        </pre>
+
+        <h3>Example</h3>
+
+        <p>Try it out using the form below &hellip;</p>
+
+        <form id="entity_example">
+          <fieldset>
+            <div class="clearfix">
+              <div class="input">
+                <textarea id="textarea" class="xxlarge" rows="10" name="textarea">
+This year was the second warmest on record for the UK, the Met Office says.
+
+Provisional figures show that only 2006, with an average temperature of 9.73C (49.5F), was warmer than 2011's average temperature of 9.62C (49.3F).
+
+This year saw high temperatures for lengthy periods; including the warmest April and spring on record, the second warmest autumn and the warmest October day.
+
+Early figures suggest 2011 is ending with a "close to average" December.
+
+The Met Office said its figures were a mean temperature taken over day and night.
+
+The mean temperature for the first 28 days of December was 4.7C (40.5F); a big swing from 2010, says the Met Office, when temperatures were 5C below average for the coldest December on record.
+
+The BBC weather centre is predicting another "very mild" day for New Year's Eve with highs of 13C (55F). Forecasters say it will be mostly cloudy and windy, with perhaps a few brighter spells in the north and east of the UK and the odd outbreak of mainly light rain or drizzle.
+
+John Prior, national climate manager at the Met Office, said: "While it may have felt mild for many so far this December, temperatures overall have been close to what we would expect.
+                </textarea>
+              </div>
+            </div>
+            <div class="actions">
+              <input class="btn" type="submit" value="Extract">
+            </div>
+          </fieldset>
+        </form>
+
+        <div id="extracted-entites" class="modal hide fade scroll">
+          <div class="modal-header">
+            <a href="#" class="close">&times;</a>
+            <h3>Extracted Entities </h3>
+          </div>
+          <div class="modal-body"></div>
+        </div>
+
+      </section>
+      
+      <section id="entityInfo">
+
+        <div class="page-header">
+          <h1>Entity Description Provider</h1>
+        </div>
+
+        <h3>URL</h3>
+        <p><code>GET /api/describe</code></p>
+
+        <h3>Parameters</h3>
+
+        <p><code>name</code> - the name of an entity you want a DBpedia description for</p>
+
+        <h3>Response</h3>
+
+        <p>A JSON response, showing the description of the entity</p>
+
+        <pre>
+{
+  "name": "Greece",
+  "description": "The 4th of August Regime ..."
+}        
+        </pre>
+
+        <h3>Example</h3>
+
+        <p>Here's an example API call <a href="/api/describe?name=Greece">/api/describe?name=Greece</a></p>
+        
+      </section>      
+
+      <section id="hackers">
+        <div class="page-header">
+          <h1>Hackers <small>play &amp; contribute &hellip;</small></h1>
+        </div>
+
+        <p>
+          juicer is written in Scala, feel free to fork the project and play about. It's still in the "toy" project stage
+          so contributions are very much welcome.
+        </p>
+
+        <p>Github url: <a href="https://github.com/matth/juicer">https://github.com/matth/juicer</a></p>
+      </section>
+    </div>
+
+    <script type="text/javascript" src="/js/script.js"></script>
+
+  </body>
+
+</html>
