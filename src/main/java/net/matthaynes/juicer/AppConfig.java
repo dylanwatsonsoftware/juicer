@@ -11,6 +11,7 @@ import com.gravity.goose.Goose;
 import com.gravity.goose.Language;
 import com.gravity.goose.network.HtmlFetcher;
 
+import net.matthaynes.juicer.network.NetworkHelper;
 import net.matthaynes.juicer.service.ArticleExtractorService;
 import net.matthaynes.juicer.service.EntityInformationService;
 import net.matthaynes.juicer.service.NamedEntityService;
@@ -20,6 +21,11 @@ import net.matthaynes.juicer.service.NamedEntityService;
 public class AppConfig {
 
 	@Bean
+	public NetworkHelper networkHelper() {
+		return new NetworkHelper();
+	}
+
+	@Bean
 	public NamedEntityService namedEntityService() throws ClassCastException, ClassNotFoundException, IOException {
 		return new NamedEntityService();
 	}
@@ -27,12 +33,12 @@ public class AppConfig {
 	@Bean
 	public ArticleExtractorService articleExtractorService()
 			throws ClassCastException, ClassNotFoundException, IOException {
-		return new ArticleExtractorService(goose(), namedEntityService());
+		return new ArticleExtractorService(networkHelper(), goose(), namedEntityService());
 	}
 
 	@Bean
 	public EntityInformationService entityInformationService() {
-		return new EntityInformationService();
+		return new EntityInformationService(networkHelper());
 	}
 
 	@Bean

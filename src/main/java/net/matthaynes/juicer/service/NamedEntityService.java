@@ -22,7 +22,7 @@ import edu.stanford.nlp.util.CoreMap;
 public class NamedEntityService {
 
 	@Nonnull
-	private final CRFClassifier<CoreMap> classifier;
+	private final CRFClassifier<? extends CoreMap> classifier;
 
 	/**
 	 * @throws IOException
@@ -48,13 +48,13 @@ public class NamedEntityService {
 
 			switch (getAnnotationType(tokens.peek())) {
 			case "ORGANIZATION":
-				addNamedEntity(entities, new Organization(getNextNameForAnnotation(tokens, "ORGANIZATION")));
+				addNamedEntity(entities, getNextOrganization(tokens));
 				break;
 			case "LOCATION":
-				addNamedEntity(entities, new Location(getNextNameForAnnotation(tokens, "LOCATION")));
+				addNamedEntity(entities, getNextLocation(tokens));
 				break;
 			case "PERSON":
-				addNamedEntity(entities, new Person(getNextNameForAnnotation(tokens, "PERSON")));
+				addNamedEntity(entities, getNextPerson(tokens));
 				break;
 			default:
 				tokens.removeFirst();
@@ -72,14 +72,28 @@ public class NamedEntityService {
 	 * @throws ClassCastException
 	 */
 	@Nonnull
-	private CRFClassifier<CoreMap> buildClassifier() throws IOException, ClassCastException, ClassNotFoundException {
+	private CRFClassifier<? extends CoreMap> buildClassifier()
+			throws IOException, ClassCastException, ClassNotFoundException {
 		try (InputStream model = NamedEntityService.class.getResourceAsStream("/english.all.3class.distsim.crf.ser.gz");
 				InputStream is = new java.io.BufferedInputStream(model);
 				GZIPInputStream gzipped = new java.util.zip.GZIPInputStream(is)) {
-			CRFClassifier<CoreMap> classifier = CRFClassifier.getClassifier(gzipped);
+			CRFClassifier<? extends CoreMap> classifier = CRFClassifier.getClassifier(gzipped);
 
 			return classifier;
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Nonnull
+	private LinkedList<CoreLabel> compress(@Nonnull List<?> mapList) {
+		LinkedList<CoreLabel> compressed = new LinkedList<>();
+		for (Object list : mapList) {
+			for (Object elem : (List<CoreLabel>) list) {
+				compressed.add((CoreLabel) elem);
+			}
+		}
+
+		return compressed;
 	}
 
 	/**
@@ -88,6 +102,10 @@ public class NamedEntityService {
 	 */
 	@Nonnull
 	private String getAnnotationType(@Nonnull CoreLabel label) {
+		if (label == null) {
+			return null;
+		}
+
 		return label.get(AnswerAnnotation.class);
 	}
 
@@ -111,23 +129,23 @@ public class NamedEntityService {
 	@Nonnull
 	private String getNextNameForAnnotation(@Nonnull LinkedList<CoreLabel> tokens, @Nonnull String annotation) {
 		List<String> words = new ArrayList<>();
-		while (getAnnotationType(tokens.peek()).equals(annotation)) {
+		while (annotation.equals(getAnnotationType(tokens.peek()))) {
 			words.add(tokens.removeFirst().toString());
 		}
 
 		return StringUtils.join(words, " ");
 	}
 
-	@Nonnull
-	private LinkedList<CoreLabel> compress(@Nonnull List<List<CoreMap>> map) {
-		LinkedList<CoreLabel> compressed = new LinkedList<>();
-		for (List<CoreMap> list : map) {
-			for (CoreMap elem : list) {
-				compressed.add((CoreLabel) elem);
-			}
-		}
+	private Organization getNextOrganization(LinkedList<CoreLabel> tokens) {
+		return new Organization(getNextNameForAnnotation(tokens, "ORGANIZATION"));
+	}
 
-		return compressed;
+	private Location getNextLocation(LinkedList<CoreLabel> tokens) {
+		return new Location(getNextNameForAnnotation(tokens, "LOCATION"));
+	}
+
+	private Person getNextPerson(LinkedList<CoreLabel> tokens) {
+		return new Person(getNextNameForAnnotation(tokens, "PERSON"));
 	}
 
 	public class NamedEntity {

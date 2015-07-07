@@ -1,6 +1,5 @@
 package net.matthaynes.juicer.service;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -8,10 +7,10 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang.StringUtils;
-import org.jsoup.Jsoup;
 
 import com.gravity.goose.Goose;
 
+import net.matthaynes.juicer.network.NetworkHelper;
 import net.matthaynes.juicer.service.NamedEntityService.NamedEntity;
 import scala.collection.JavaConversions;
 
@@ -23,11 +22,16 @@ public class ArticleExtractorService {
 	@Nonnull
 	private final NamedEntityService namedEntityService;
 
+	@Nonnull
+	private final NetworkHelper networkHelper;
+
 	/**
 	 * @param goose
 	 * @param namedEntityService
 	 */
-	public ArticleExtractorService(@Nonnull Goose goose, @Nonnull NamedEntityService namedEntityService) {
+	public ArticleExtractorService(@Nonnull NetworkHelper networkHelper, @Nonnull Goose goose,
+			@Nonnull NamedEntityService namedEntityService) {
+		this.networkHelper = networkHelper;
 		this.goose = goose;
 		this.namedEntityService = namedEntityService;
 	}
@@ -40,7 +44,7 @@ public class ArticleExtractorService {
 	 */
 	@CheckForNull
 	public Article extract(@Nonnull String url) {
-		String html = getHtml(url);
+		String html = networkHelper.getHtml(url);
 		if (StringUtils.isBlank(html)) {
 			return null;
 		}
@@ -57,16 +61,6 @@ public class ArticleExtractorService {
 				article.metaDescription(), article.cleanedArticleText(), image,
 				JavaConversions.mapAsJavaMap(article.additionalData()), entities);
 
-	}
-
-	private String getHtml(String url) {
-		try {
-			return Jsoup.connect(url).get().html();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return StringUtils.EMPTY;
 	}
 
 	private Image getImage(@Nonnull com.gravity.goose.Article article) {
