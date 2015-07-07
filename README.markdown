@@ -8,4 +8,4 @@ For more info visit: http://juicer.herokuapp.com/
 
 * `mvn install`
 * Run `java -Xmx1g -jar target/juicerplus-0.0.1.jar`
-
+* Now open `http://localhost:8081` in a browser
