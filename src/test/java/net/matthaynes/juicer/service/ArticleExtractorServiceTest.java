@@ -23,5 +23,6 @@ public class ArticleExtractorServiceTest {
 
 	@Test
 	public void testExtractArticleData() {
+		articleExtractorService.extract("url");
 	}
 }

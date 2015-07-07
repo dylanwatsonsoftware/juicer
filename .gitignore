@@ -40,3 +40,4 @@ lib_managed
 
 #SHITTY output not in target directory
 build.log
+.springBeans

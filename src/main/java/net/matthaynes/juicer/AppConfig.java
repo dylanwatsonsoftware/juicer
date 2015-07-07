@@ -1,5 +1,7 @@
 package net.matthaynes.juicer;
 
+import java.io.IOException;
+
 import org.apache.http.HttpHost;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +20,13 @@ import net.matthaynes.juicer.service.NamedEntityService;
 public class AppConfig {
 
 	@Bean
-	public NamedEntityService namedEntityService() {
+	public NamedEntityService namedEntityService() throws ClassCastException, ClassNotFoundException, IOException {
 		return new NamedEntityService();
 	}
 
 	@Bean
-	public ArticleExtractorService articleExtractorService() {
+	public ArticleExtractorService articleExtractorService()
+			throws ClassCastException, ClassNotFoundException, IOException {
 		return new ArticleExtractorService(goose(), namedEntityService());
 	}
 

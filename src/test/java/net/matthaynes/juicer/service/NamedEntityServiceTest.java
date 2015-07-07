@@ -24,11 +24,16 @@ public class NamedEntityServiceTest {
 
 	String testString = "The fate of Lehman Brothers, the beleaguered investment bank, hung in the balance on Sunday\n    as Federal Reserve officials and the leaders of major financial institutions continued to gather in emergency\n    meetings trying to complete a plan to rescue the stricken bank. Several possible plans emerged from the talks,\n    held at the Federal Reserve Bank of New York and led by Timothy R. Geithner, the president of the New York Fed,\n    and Treasury Secretary Henry M. Paulson Jr.\n\n    Meanwhile, in London, the capital city of the United Kingdom there was a strike on the London Underground, this\n    was not an issue for Mr Paulson though, as he live in the US not the United Kingdom";
 
+	/**
+	 * @throws Exception
+	 */
 	@Before
-	public void before() {
+	public void before() throws Exception {
 		namedEntityService = new NamedEntityService();
 	}
 
+	/**
+	 */
 	@Test
 	public void extractEntities() {
 		Collection<NamedEntity> entities = namedEntityService.entities(testString);

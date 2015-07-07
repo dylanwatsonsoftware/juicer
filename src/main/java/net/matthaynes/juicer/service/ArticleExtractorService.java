@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,12 +23,22 @@ public class ArticleExtractorService {
 	@Nonnull
 	private final NamedEntityService namedEntityService;
 
+	/**
+	 * @param goose
+	 * @param namedEntityService
+	 */
 	public ArticleExtractorService(@Nonnull Goose goose, @Nonnull NamedEntityService namedEntityService) {
 		this.goose = goose;
 		this.namedEntityService = namedEntityService;
 	}
 
-	@Nonnull
+	/**
+	 * @param url
+	 *            the url of the article
+	 * 
+	 * @return the article
+	 */
+	@CheckForNull
 	public Article extract(@Nonnull String url) {
 		String html = getHtml(url);
 		if (StringUtils.isBlank(html)) {
@@ -67,7 +78,7 @@ public class ArticleExtractorService {
 		}
 	}
 
-	public class Image {
+	public static class Image {
 
 		String src;
 
@@ -94,7 +105,7 @@ public class ArticleExtractorService {
 		}
 	}
 
-	public class Article {
+	public static class Article {
 		String url;
 		String domain;
 		String hash;

@@ -24,7 +24,12 @@ public class NamedEntityService {
 	@Nonnull
 	private final CRFClassifier<CoreMap> classifier;
 
-	public NamedEntityService() {
+	/**
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws ClassCastException
+	 */
+	public NamedEntityService() throws ClassCastException, ClassNotFoundException, IOException {
 		this.classifier = buildClassifier();
 	}
 
@@ -62,18 +67,18 @@ public class NamedEntityService {
 
 	/**
 	 * @return an English Stanford NLP Classifier
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws ClassCastException
 	 */
 	@Nonnull
-	private CRFClassifier<CoreMap> buildClassifier() {
-		try (InputStream model = getClass().getResourceAsStream("/english.all.3class.distsim.crf.ser.gz");
+	private CRFClassifier<CoreMap> buildClassifier() throws IOException, ClassCastException, ClassNotFoundException {
+		try (InputStream model = NamedEntityService.class.getResourceAsStream("/english.all.3class.distsim.crf.ser.gz");
 				InputStream is = new java.io.BufferedInputStream(model);
 				GZIPInputStream gzipped = new java.util.zip.GZIPInputStream(is)) {
 			CRFClassifier<CoreMap> classifier = CRFClassifier.getClassifier(gzipped);
 
 			return classifier;
-		} catch (IOException | ClassCastException | ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
 

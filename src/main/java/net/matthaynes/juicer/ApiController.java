@@ -32,6 +32,11 @@ public class ApiController {
 	@Nonnull
 	private final EntityInformationService entityInformationService;
 
+	/**
+	 * @param namedEntityService
+	 * @param articleExtractorService
+	 * @param entityInformationService
+	 */
 	@Autowired
 	public ApiController(@Nonnull NamedEntityService namedEntityService,
 			@Nonnull ArticleExtractorService articleExtractorService,
@@ -74,10 +79,10 @@ public class ApiController {
 	}
 
 	/**
-	 * @param text
-	 *            the text to extract entities from
+	 * @param name
+	 *            the name of the entity to describe
 	 * 
-	 * @return the entities
+	 * @return the entity
 	 * @throws UnsupportedEncodingException
 	 */
 	@Nonnull

@@ -17,18 +17,29 @@ import org.apache.commons.io.IOUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.matthaynes.juicer.Properties;
 import net.matthaynes.juicer.service.EntityInformationService.DbpediaJsonResult.DbpediaResults.DbpediaBinding;
 
+@SuppressFBWarnings({ "NP_UNWRITTEN_FIELD", "UWF_NULL_FIELD" })
 public class EntityInformationService {
 
 	private final Gson gson;
 
+	/**
+	 */
 	public EntityInformationService() {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		this.gson = gsonBuilder.create();
 	}
 
+	/**
+	 * @param entityName
+	 * 
+	 * @return the entity
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
 	@Nonnull
 	public Entity information(@Nonnull String entityName) throws UnsupportedEncodingException {
 		String dbPediaUrl = getDbPediaUrl(entityName);
@@ -71,42 +82,62 @@ public class EntityInformationService {
 		return null;
 	}
 
-	class DbpediaJsonResult {
-		DbpediaResults results;
-
-		class DbpediaResults {
-			List<DbpediaBinding> bindings;
-
-			class DbpediaBinding {
-				DbpediaResult wikipedia_data_field_abstract;
-
-				class DbpediaResult {
-					String type;
-					String value;
-				}
-			}
-		}
-	}
-
-	public class Entity {
+	public static class Entity {
 
 		@Nonnull
 		String name;
 
-		@Nonnull
+		@CheckForNull
 		String description;
 
-		public Entity(@Nonnull String name, @Nonnull String description) {
+		public Entity(@Nonnull String name, @CheckForNull String description) {
 			this.name = name;
 			this.description = description;
 		}
 
+		@Nonnull
 		public String getName() {
 			return name;
 		}
 
+		@CheckForNull
 		public String getDescription() {
 			return description;
+		}
+	}
+
+	static class DbpediaJsonResult {
+		final DbpediaResults results;
+
+		public DbpediaJsonResult() {
+			this.results = null;
+		}
+
+		@SuppressFBWarnings("URF_UNREAD_FIELD")
+		static class DbpediaResults {
+			final List<DbpediaBinding> bindings;
+
+			public DbpediaResults() {
+				this.bindings = null;
+			}
+
+			static class DbpediaBinding {
+				final DbpediaResult wikipedia_data_field_abstract;
+
+				public DbpediaBinding() {
+					this.wikipedia_data_field_abstract = null;
+				}
+
+				static class DbpediaResult {
+					final String type;
+					final String value;
+
+					public DbpediaResult() {
+						this.type = null;
+						this.value = null;
+					}
+				}
+			}
 		}
 	}
 }
