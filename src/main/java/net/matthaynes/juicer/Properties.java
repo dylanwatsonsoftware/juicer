@@ -2,50 +2,58 @@ package net.matthaynes.juicer;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-
 import org.apache.commons.lang.StringUtils;
 
 public class Properties {
 
-	@Nonnull
-	public static final String TEMP_DIRECTORY = getProperty("temp.dir", "/tmp/goose");
+  @Nonnull
+  public static final String TEMP_DIRECTORY = getProperty("temp.dir", "C:\\Temp\\");
 
-	@Nonnull
-	public static final String IMAGE_MAGICK_CONVERT_HOME = getProperty("imagemagick.convert.home",
-			"C:\\Program Files\\ImageMagick-6.9.1-Q16\\convert.exe");
+  @Nonnull
+  public static final String IMAGE_MAGICK_CONVERT_HOME = getProperty("imagemagick.convert.home",
+      "C:\\Program Files\\ImageMagick-6.9.1-Q16\\convert.exe");
 
-	@Nonnull
-	public static final String IMAGE_MAGICK_IDENTIFY_HOME = getProperty("imagemagick.identify.home",
-			"C:\\Program Files\\ImageMagick-6.9.1-Q16\\identify.exe");
+  @Nonnull
+  public static final String IMAGE_MAGICK_IDENTIFY_HOME = getProperty("imagemagick.identify.home",
+      "C:\\Program Files\\ImageMagick-6.9.1-Q16\\identify.exe");
 
-	@CheckForNull
-	public static final String PROXY_HOST = getProperty("http.proxyHost");
+  @CheckForNull
+  public static final String PROXY_HOST = getProperty("http.proxyHost");
 
-	@Nonnull
-	public static final int PROXY_PORT = getProperty("http.proxyPort", 8080);
+  @Nonnull
+  public static final int PROXY_PORT = getProperty("http.proxyPort", 8080);
 
-	@CheckForNull
-	private static String getProperty(String key) {
-		String value = System.getProperty(key);
-		printProperties(key, value);
-		return value;
-	}
+  @Nonnull
+  public static final int CONNECT_TIMEOUT = getProperty("connect.timeout", 10000);
 
-	@Nonnull
-	private static String getProperty(String key, String defaultValue) {
-		String value = System.getProperty(key, defaultValue);
-		printProperties(key, value);
-		return value;
-	}
+  @Nonnull
+  public static final int READ_TIMEOUT = getProperty("read.timeout", 30000);
 
-	@Nonnull
-	private static int getProperty(String key, int defaultValue) {
-		int value = Integer.getInteger(key, defaultValue);
-		printProperties(key, value);
-		return value;
-	}
+  @Nonnull
+  public static final int IMAGE_TIMEOUT = getProperty("image.timeout", 10000);
 
-	private static void printProperties(@Nonnull String key, @Nonnull Object value) {
-		System.out.println(StringUtils.leftPad(key, 25) + " : " + value);
-	}
+  @CheckForNull
+  private static String getProperty(String key) {
+    String value = System.getProperty(key);
+    printProperties(key, value);
+    return value;
+  }
+
+  @Nonnull
+  private static String getProperty(String key, String defaultValue) {
+    String value = System.getProperty(key, defaultValue);
+    printProperties(key, value);
+    return value;
+  }
+
+  @Nonnull
+  private static int getProperty(String key, int defaultValue) {
+    int value = Integer.getInteger(key, defaultValue);
+    printProperties(key, value);
+    return value;
+  }
+
+  private static void printProperties(@Nonnull String key, @Nonnull Object value) {
+    System.out.println(StringUtils.leftPad(key, 25) + " : " + value);
+  }
 }
