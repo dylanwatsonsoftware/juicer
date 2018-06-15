@@ -6,8 +6,8 @@ For more info visit: http://juicer.herokuapp.com/
 
 ### Setup
 Install:
-    * Maven
-    * ImageMagick (http://www.imagemagick.org/download/binaries/ImageMagick-6.9.1-7-Q16-x64-dll.exe)
+  * Maven
+  * ImageMagick (http://www.imagemagick.org/download/binaries/ImageMagick-6.9.1-7-Q16-x64-dll.exe)
 
 ### Running the app
 
