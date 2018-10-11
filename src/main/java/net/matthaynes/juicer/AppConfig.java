@@ -1,5 +1,6 @@
 package net.matthaynes.juicer;
 
+import java.util.List;
 import java.io.IOException;
 import javax.annotation.Nonnull;
 import org.apache.http.HttpHost;
@@ -19,6 +20,10 @@ import com.optimaize.langdetect.profiles.LanguageProfileReader;
 import com.optimaize.langdetect.text.CommonTextObjectFactories;
 import com.optimaize.langdetect.text.TextObject;
 import com.optimaize.langdetect.text.TextObjectFactory;
+import com.optimaize.langdetect.LanguageDetector;
+import com.optimaize.langdetect.LanguageDetectorBuilder;
+import com.optimaize.langdetect.i18n.LdLocale;
+import com.optimaize.langdetect.ngram.NgramExtractors;
 
 /**
  *
@@ -113,11 +118,10 @@ public class AppConfig {
 
     return config;
   }
-  }
 
-  public class DefaultingLanguageDetector {
+  public static class DefaultingLanguageDetector {
 
-    private final String defaultLang = "en";
+    private static final String defaultLang = "en";
 
     private final LanguageDetector languageDetector;
 
@@ -146,4 +150,5 @@ public class AppConfig {
       return defaultLang;
 
     }
+  }
 }
