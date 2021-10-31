@@ -16,7 +16,7 @@
   <!-- Properties -->
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.7</java.version>
+    <java.version>1.8</java.version>
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
 
     <!-- Default output directory. -->
@@ -28,12 +28,13 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
+<!-- https://mvnrepository.com/artifact/com.gravity/goose -->
 <dependency>
-    <groupId>com.github.karasiq</groupId>
-    <artifactId>goose_2.12</artifactId>
-    <version>2.1.29</version>
+    <groupId>com.gravity</groupId>
+    <artifactId>goose</artifactId>
+    <version>2.1.23</version>
 </dependency>
+
 
     <dependency>
       <groupId>com.optimaize.languagedetector</groupId>
