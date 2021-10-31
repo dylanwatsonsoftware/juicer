@@ -28,11 +28,13 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.gravity.goose</groupId>
-      <artifactId>goose_2.11</artifactId>
-      <version>2.2.4</version>
-    </dependency>
+
+<dependency>
+    <groupId>com.github.karasiq</groupId>
+    <artifactId>goose_2.12</artifactId>
+    <version>2.1.29</version>
+</dependency>
+
     <dependency>
       <groupId>com.optimaize.languagedetector</groupId>
       <artifactId>language-detector</artifactId>
