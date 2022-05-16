@@ -1,0 +1,32 @@
+name: Java Maven CI
+
+on: [push]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: java-mvn
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: "17"
+          distribution: "adopt"
+          cache: maven
+
+      - name: Maven Verify
+        run: mvn --batch-mode verify
+
+      - name: Test Report
+        uses: dylanwatsonsoftware/test-reporter@v1
+        if: always()
+        with:
+          name: JUnit Tests
+          path: java-mvn/target/**/*.xml
+          reporter: java-junit
